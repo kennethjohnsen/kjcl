@@ -1,22 +1,21 @@
 #include "arena.h"
+
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
-// Initialize the arena allocator with a given size
-void arena_init(ArenaAllocator *arena, size_t size) {
+bool arena_init(struct ArenaAllocator *arena, size_t size) {
     arena->memory = (char *)malloc(size);
     if (!arena->memory) {
-        fprintf(stderr, "Failed to allocate memory for arena\n");
-        exit(EXIT_FAILURE);
+        return false;
     }
     arena->size = size;
     arena->offset = 0;
+    return true;
 }
 
-// Allocate memory from the arena
-void *arena_alloc(ArenaAllocator *arena, size_t size) {
+void *arena_alloc(struct ArenaAllocator *arena, size_t size) {
     if (arena->offset + size > arena->size) {
-        fprintf(stderr, "Arena out of memory\n");
         return NULL;
     }
     void *ptr = arena->memory + arena->offset;
@@ -24,13 +23,11 @@ void *arena_alloc(ArenaAllocator *arena, size_t size) {
     return ptr;
 }
 
-// Reset the arena for reuse
-void arena_reset(ArenaAllocator *arena) {
+void arena_reset(struct ArenaAllocator *arena) {
     arena->offset = 0;
 }
 
-// Free the arena memory
-void arena_free(ArenaAllocator *arena) {
+void arena_free(struct ArenaAllocator *arena) {
     free(arena->memory);
     arena->memory = NULL;
     arena->size = 0;

@@ -1,28 +1,44 @@
-//
-// Created by Kenneth Johnsen on 10/01/2025.
-//
-
 #ifndef ARENA_H
 #define ARENA_H
 
 #include <stdlib.h>
+#include <stdbool.h>
 
-typedef struct {
+/**
+* Arena allocator.
+*/
+struct ArenaAllocator {
     char *memory;
     size_t size;
     size_t offset;
-} ArenaAllocator;
+};
 
-// Initialize the arena allocator with a given size
-void arena_init(ArenaAllocator *arena, size_t size);
+/**
+* Initialize the arena allocator.
+* @param arena Arena allocator.
+* @param size Size of the arena.
+* @return True if the arena was initialized successfully, false otherwise.
+*/
+bool arena_init(struct ArenaAllocator *arena, size_t size);
 
-// Allocate memory from the arena
-void *arena_alloc(ArenaAllocator *arena, size_t size);
+/**
+* Allocate memory from the arena.
+* @param arena Arena allocator.
+* @param size Size of the memory to allocate.
+* @return Pointer to the allocated memory, or NULL if the allocation failed.
+*/
+void *arena_alloc(struct ArenaAllocator *arena, size_t size);
 
-// Reset the arena for reuse
-void arena_reset(ArenaAllocator *arena);
+/**
+* Reset the arena allocator.
+* @param arena Arena allocator.
+*/
+void arena_reset(struct ArenaAllocator *arena);
 
-// Free the arena memory
-void arena_free(ArenaAllocator *arena);
+/**
+* Free the arena allocator.
+* @param arena Arena allocator.
+*/
+void arena_free(struct ArenaAllocator *arena);
 
 #endif //ARENA_H
